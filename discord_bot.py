@@ -52,23 +52,23 @@ parseEdtSQLite2.mainL1InfoSakyna()
 parseEdtSQLite2.main1InfoLinda()
 parseEdtSQLite2.main1InfoAndréa()
 
-import DisplayConfig.displayConfigL2
-DisplayConfig.displayConfigL2.main()
+import DisplayConfig.DisplayConfigL2
+DisplayConfig.DisplayConfigL2.main()
 
-import DisplayConfig.displayConfigL1
-DisplayConfig.displayConfigL1.main()
+import DisplayConfig.DisplayConfigL1
+DisplayConfig.DisplayConfigL1.main()
 
-import DisplayConfig.displayConfigL1infoDiane
-DisplayConfig.displayConfigL1infoDiane.main()
+import DisplayConfig.DisplayConfigL1infoDiane
+DisplayConfig.DisplayConfigL1infoDiane.main()
 
-import DisplayConfig.displayConfigL1infoSakyna
-DisplayConfig.displayConfigL1infoSakyna.main()
+import DisplayConfig.DisplayConfigL1infoSakyna
+DisplayConfig.DisplayConfigL1infoSakyna.main()
 
-import DisplayConfig.displayConfigL1infoLinda
-DisplayConfig.displayConfigL1infoLinda.main()
+import DisplayConfig.DisplayConfigL1infoLinda
+DisplayConfig.DisplayConfigL1infoLinda.main()
 
-import DisplayConfig.displayConfigL1infoAndréa
-DisplayConfig.displayConfigL1infoAndréa.main()
+import DisplayConfig.DisplayConfigL1infoAndréa
+DisplayConfig.DisplayConfigL1infoAndréa.main()
 
 # ----------------------------------------------------------------------
 # Configuration Pygame en mode headless (Railway = pas d'écran)
