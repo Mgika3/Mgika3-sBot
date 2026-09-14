@@ -195,7 +195,7 @@ def dessiner_cours(ecran, grille, cours, police_nom, police_heure, survole):
 
     # Affichage de la salle en bas
     if cours.get("salle"):
-        salle_texte = f"📍 {cours['salle']}"
+        salle_texte = f" {cours['salle']}"
         salle_lignes = decouper_texte(salle_texte, police_nom, rect.width - 8)
         for ligne in salle_lignes[:1]:  # 1 ligne max pour la salle
             surf_salle = police_nom.render(ligne, True, COULEUR_TEXTE_BLOC)
