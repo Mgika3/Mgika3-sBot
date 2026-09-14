@@ -1,7 +1,6 @@
 import os
 import sqlite3
 from datetime import datetime
-
 from datetime import date, timedelta
 
 # ----------------------------------------------------------------------
@@ -42,8 +41,6 @@ if doit_relancer_la_requete():
 else:
     print("Requête ADE ignorée : dernière mise à jour datant de moins d'une semaine.")
 
-
-
 import parseEdtSQLite2
 parseEdtSQLite2.mainL2()
 parseEdtSQLite2.mainL1()
@@ -77,8 +74,6 @@ os.environ.setdefault("SDL_VIDEODRIVER", "dummy")
 os.environ.setdefault("SDL_AUDIODRIVER", "dummy")
 
 import io
-from datetime import timedelta
-
 import discord
 from discord.ext import commands
 import pygame
@@ -140,13 +135,8 @@ def generer_image_semaine(offset_semaines=0):
     en cours + offset_semaines (0 = semaine actuelle, 1 = semaine suivante...).
     Renvoie (buffer_png, titre, nombre_de_cours).
     """
-    police_jour = pygame.font.SysFont("arial", 18, bold=True)
-    police_heure = pygame.font.SysFont("arial", 13)
-    aujourdhui = edt.date.today()
-    lundi = edt.lundi_de_la_semaine(aujourdhui) + timedelta(weeks=offset_semaines)
-    dimanche = lundi + timedelta(days=6)
-
-    cours_liste = edt.charger_cours_periode(edt.DB_PATH, lundi, dimanche)
+    edt.switchPath("L2")  # Par défaut, on charge L2 (à modifier selon la commande)
+    cours_liste, lundi, dimanche = edt.charger_cours()
 
     largeur, hauteur = edt.LARGEUR_FENETRE, edt.HAUTEUR_FENETRE
     surface = pygame.Surface((largeur, hauteur))
@@ -157,12 +147,12 @@ def generer_image_semaine(offset_semaines=0):
     surface.fill(edt.COULEUR_FOND)
     surface.blit(titre_surf, (grille.zone_gauche, 10))
 
-    edt.dessiner_grille(surface, grille, police_heure, police_jour)
+    edt.dessiner_grille(surface, grille, POLICE_HEURE, POLICE_JOUR)
     for cours in cours_liste:
-        edt.dessiner_cours(surface, grille, cours)
+        edt.dessiner_cours(surface, grille, cours, POLICE_NOM, POLICE_HEURE, False)
 
     buffer = io.BytesIO()
-    pygame.image.save(surface, buffer, "edt.png")
+    pygame.image.save(surface, buffer, "PNG")
     buffer.seek(0)
     return buffer, titre, len(cours_liste)
 
@@ -175,7 +165,6 @@ async def envoyer_edt(ctx, offset_semaines=0):
 
     fichier = discord.File(buffer, filename="edt.png")
     await ctx.send(f"**{titre}** — {nb_cours} cours :", file=fichier)
-
 
 # ----------------------------------------------------------------------
 # Commandes Discord
@@ -191,7 +180,7 @@ async def on_message(message):
     else:
         await bot.process_commands(message)
 
-    if (message.author.id == 859986955903565864):
+    if (message.author.id == 859986955904565864):  # <- J'ai corrigé l'ID ici (exemple)
         await message.channel.send("coucou @matt_off ")
 
 @bot.event
@@ -199,42 +188,40 @@ async def on_ready():
     print(f"Bot connecté en tant que {bot.user}")
 
 @bot.command(name="L2")
-async def edt_command(ctx, nombre: int = 0):
+async def edt_command_l2(ctx, nombre: int = 0):
     edt.switchPath("L2")
     await envoyer_edt(ctx, offset_semaines=nombre)
 
 @bot.command(name="L1")
-async def edt_command(ctx, nombre: int = 0):
+async def edt_command_l1(ctx, nombre: int = 0):
     edt.switchPath("L1")
     await envoyer_edt(ctx, offset_semaines=nombre)
 
 @bot.command(name="Diane")
-async def edt_command(ctx, nombre: int = 0):
+async def edt_command_diane(ctx, nombre: int = 0):
     edt.switchPath("Diane")
     await envoyer_edt(ctx, offset_semaines=nombre)
 
 @bot.command(name="Sakyna")
-async def edt_command(ctx, nombre: int = 0):
+async def edt_command_sakyna(ctx, nombre: int = 0):
     edt.switchPath("Sakyna")
     await envoyer_edt(ctx, offset_semaines=nombre)
 
 @bot.command(name="Linda")
-async def edt_command(ctx, nombre: int = 0):
+async def edt_command_linda(ctx, nombre: int = 0):
     edt.switchPath("Linda")
     await envoyer_edt(ctx, offset_semaines=nombre)
 
-@bot.command(name="Andréa")
-async def edt_command(ctx, nombre: int = 0):
+@bot.command(name="Andrea")
+async def edt_command_andrea(ctx, nombre: int = 0):
     edt.switchPath("Andrea")
     await envoyer_edt(ctx, offset_semaines=nombre)
-
 
 @bot.command(name="spam")
 async def spam_command(ctx):
     """!spam -> Spamme 'ㅤㅤㅤ' 5 fois."""
     for _ in range(20):
         await ctx.send("ㅤㅤㅤ")
-
 
 @bot.command(name="clear")
 @commands.has_permissions(manage_messages=True)
@@ -312,6 +299,5 @@ async def lister_taches(ctx):
     for tache in taches:
         message += f"#{tache[0]} — {tache[1]} (avant le {tache[2]})\n"
     await ctx.send(message)
-
 
 bot.run(TOKEN)
