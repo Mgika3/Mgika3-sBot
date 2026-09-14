@@ -140,6 +140,8 @@ def generer_image_semaine(offset_semaines=0):
     en cours + offset_semaines (0 = semaine actuelle, 1 = semaine suivante...).
     Renvoie (buffer_png, titre, nombre_de_cours).
     """
+    police_jour = pygame.font.SysFont("arial", 18, bold=True)
+    police_heure = pygame.font.SysFont("arial", 13)
     aujourdhui = edt.date.today()
     lundi = edt.lundi_de_la_semaine(aujourdhui) + timedelta(weeks=offset_semaines)
     dimanche = lundi + timedelta(days=6)
@@ -155,7 +157,7 @@ def generer_image_semaine(offset_semaines=0):
     surface.fill(edt.COULEUR_FOND)
     surface.blit(titre_surf, (grille.zone_gauche, 10))
 
-    edt.dessiner_grille(surface, grille)
+    edt.dessiner_grille(surface, grille, police_heure, police_jour)
     for cours in cours_liste:
         edt.dessiner_cours(surface, grille, cours)
 
